@@ -1,0 +1,70 @@
+@import "@/scss/variables.scss";
+
+.form-signin {
+  width: 100%;
+  height: 100vh;
+  background-color: green;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 400;
+}
+
+form {
+  max-width: 430px;
+  background-color: $white;
+  padding: 3rem;
+  border-radius: $border-radius;
+}
+
+.form-floating {
+  text-align: left;
+  margin: 10px 0;
+
+  label {
+    margin-bottom: 0px;
+    font-size: 12px;
+    font-weight: 400;
+  }
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input {
+  color: $neutral-gray-200;
+}
+
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.btn-primary {
+  margin-top: 10px;
+  background-color: $cl-brand-red;
+  border-color: $cl-brand-red;
+  font-size: 16px;
+}
+
+.btn-primary:hover {
+  background-color: $cl-brand-red;
+}
+
+.bottom-text {
+  font-size: 12px;
+}
+
+.form-heading {
+  font-size: 30px;
+  font-weight: 700;
+  color: $cl-main-heading;
+}

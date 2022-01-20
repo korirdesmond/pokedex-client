@@ -1,11 +1,28 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Dashboard from "@/views/Dashboard.vue";
+import Wrapper from "@/views/Wrapper.vue";
+import Signup from "@/views/Signup.vue";
+import Login from "@/views/Login.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/",
-    name: "Dashboard",
-    component: Dashboard,
+    path: "",
+    component: Wrapper,
+    children: [
+      {
+        path: "/",
+        name: "Dashboard",
+        component: Dashboard,
+      },
+    ],
+  },
+  {
+    path: "/register",
+    component: Signup,
+  },
+  {
+    path: "/login",
+    component: Login,
   },
 ];
 
