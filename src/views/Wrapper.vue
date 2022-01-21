@@ -7,7 +7,7 @@
         <div class="sidebar-sticky"></div>
       </nav>
 
-      <main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-4">
+      <main role="main" class="col-md-11 col-lg-11 pl-1">
         <router-view />
       </main>
     </div>
@@ -33,12 +33,10 @@ export default {
  */
 
 .sidebar {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
   z-index: 100; /* Behind the navbar */
   padding: 48px 0 0; /* Height of navbar */
+  min-height: 100vh;
+  height: 100vh;
 }
 
 .sidebar-sticky {
@@ -51,12 +49,13 @@ export default {
  */
 
 [role="main"] {
-  padding-top: 133px; /* Space for fixed navbar */
+  padding-top: 130px; /* Space for fixed navbar */
+  background-color: $neutral-gray-50;
 }
 
 @media (min-width: 768px) {
   [role="main"] {
-    padding-top: 48px; /* Space for fixed navbar */
+    padding-top: 120px; /* Space for fixed navbar */
   }
 }
 </style>

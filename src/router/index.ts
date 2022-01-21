@@ -10,7 +10,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Wrapper,
     children: [
       {
-        path: "/",
+        path: "",
         name: "Dashboard",
         component: Dashboard,
       },

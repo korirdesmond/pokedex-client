@@ -5,10 +5,11 @@
     /></a>
 
     <div class="navbar-right shadow-base collapse navbar-collapse">
+      <SearchIcon class="search-icon" />
       <input
         class="form-control form-control-light w-90"
         type="text"
-        placeholder="Search"
+        placeholder="Search all pokemons"
         aria-label="Search"
       />
       <ul class="navbar-nav mr-auto">
@@ -32,8 +33,12 @@
 </template>
 
 <script lang="ts">
+import { SearchIcon } from "@heroicons/vue/solid";
 export default {
   name: "Nav",
+  components: {
+    SearchIcon,
+  },
 };
 </script>
 
@@ -68,7 +73,7 @@ export default {
 }
 
 .navbar .form-control {
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1rem 0.75rem 0rem;
   border-width: 0;
   border-radius: 0;
 }
@@ -81,5 +86,11 @@ export default {
 .form-control-dark:focus {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+}
+
+.search-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
 }
 </style>
