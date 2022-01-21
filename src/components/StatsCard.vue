@@ -18,7 +18,6 @@ export default defineComponent({
     value: Number,
   },
   setup(props): any {
-    console.log("pop", props);
     return { props };
   },
 });
