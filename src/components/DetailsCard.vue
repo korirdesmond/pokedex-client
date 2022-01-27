@@ -11,7 +11,7 @@
         <span>{{ props.name }}</span>
         <StarIcon
           class="star-icon"
-          :class="[props.favorite ? 'star-icon-fovorited' : '']"
+          :class="[props.favourite ? 'star-icon-fovorited' : '']"
         />
       </div>
       <div class="details-info-id">{{ idHash(props.id) }}</div>
@@ -81,7 +81,7 @@ export default defineComponent({
     sprite: String,
     species: Object,
     stats: Object,
-    favorite: Boolean,
+    favourite: Boolean,
   },
   setup(props, { emit }) {
     function idHash(id: number) {

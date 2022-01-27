@@ -39,7 +39,7 @@
             class="nav-link dropdown-toggle"
             id="dropdown01"
             @click="toggleDropdown"
-            >Name Name</a
+            >{{ name }}</a
           >
           <div
             class="dropdown-menu"
@@ -69,6 +69,7 @@ export default {
     const isMenuOpened = ref(false);
     const isDropdownOpened = ref(false);
     const router = useRouter();
+    const name = localStorage.getItem("name");
 
     function toggleMenu() {
       isMenuOpened.value = !isMenuOpened.value;
@@ -92,6 +93,7 @@ export default {
       toggleDropdown,
       isDropdownOpened,
       logout,
+      name,
     };
   },
 };

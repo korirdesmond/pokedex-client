@@ -25,8 +25,8 @@
       >
         <StarIcon
           class="star-icon"
-          :class="[props.favorite ? 'star-icon-fovorited' : '']"
-        />Star
+          :class="[props.favourite ? 'star-icon-fovorited' : '']"
+        />Star {{ props.favourite ? 'true' : 'fals' }}
       </button>
       <button
         class="btn btn-lg card-action-details"
@@ -57,7 +57,7 @@ export default defineComponent({
     sprite: String,
     species: Object,
     stats: Object,
-    favorite: Boolean,
+    favourite: Boolean,
   },
   setup(props, { emit }) {
     function idHash(id: number) {
@@ -116,6 +116,7 @@ export default defineComponent({
   font-size: 16px;
   font-weight: 700;
   color: $cl-main-heading;
+  text-transform: capitalize;
 }
 
 .card-id {

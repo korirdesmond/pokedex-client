@@ -60,6 +60,7 @@
 <script>
 import { onMounted, ref, computed, reactive } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router"
 import StatsCard from "@/components/StatsCard.vue";
 import PokemonCard from "@/components/PokemonCard.vue";
 import DetailsCard from "@/components/DetailsCard.vue";
@@ -86,6 +87,7 @@ export default {
     const loading = ref(false);
     const detailOpened = ref(false);
     const selectedPokemon = reactive({});
+    const router = useRouter();
 
     const pagePokemons = computed(() => {
       const startIdx = page.value * 10 - 10;
@@ -128,17 +130,25 @@ export default {
 
     function fetchPokemons() {
       return axios
-        .get("pokemons", {
+        .get("pokemons?limit=60", {
           headers: { Authorization: `${localStorage.token}` },
         })
         .then((response) => {
           const { data } = response;
+          console.log('data', data);
           pokemons.value = [...data];
           pageCount.value = data.length / 10;
           loading.value = false;
         })
         .catch((error) => {
           loading.value = false;
+          const { message } = error.response?.data;
+
+          if (message === "jwt expired") {
+            localStorage.removeItem("token");
+            localStorage.removeItem("name");
+            router.push("/login");
+          }
           console.log("error", error);
         });
     }
@@ -154,6 +164,7 @@ export default {
         )
         .then((response) => {
           const { data } = response;
+          console.log('')
           fetchPokemons();
         })
         .catch((error) => {
