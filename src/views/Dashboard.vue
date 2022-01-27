@@ -8,14 +8,14 @@
           paddingRight: detailOpened ? '5px' : '1px',
         }"
       >
-        <div class="page-heading">Pokemons</div>
+        <div class="page-heading">Pokémons</div>
 
-        <div class="page-content" v-if="loading">
-          <img class="pokeball-icon" src="../assets/Pokeball.svg" />
+        <div class="loading-content" v-if="loading">
+          <img class="pokeball-icon" src="../assets/Loading.svg" />
         </div>
         <div class="page-content" v-else>
           <div class="row row-stats">
-            <StatsCard title="Pokemons" :value="pokemonStats" />
+            <StatsCard title="Pokémons" :value="pokemonStats" />
             <StatsCard title="Species" :value="speciesStats" />
             <StatsCard title="Types" :value="typesStats" />
           </div>
@@ -52,15 +52,17 @@
         v-if="detailOpened"
         v-bind="selectedPokemon"
         @close-details="closeDetails"
+        @update-favorite="updateFavorite"
       />
     </div>
   </div>
 </template>
 
 <script>
-import { onMounted, ref, computed, reactive } from "vue";
+import { onMounted, ref, computed, reactive, defineComponent } from "vue";
 import axios from "axios";
-import { useRouter } from "vue-router"
+import { useRouter } from "vue-router";
+import emitter from "tiny-emitter/instance";
 import StatsCard from "@/components/StatsCard.vue";
 import PokemonCard from "@/components/PokemonCard.vue";
 import DetailsCard from "@/components/DetailsCard.vue";
@@ -70,7 +72,7 @@ import {
   ArrowNarrowRightIcon,
 } from "@heroicons/vue/solid";
 
-export default {
+export default defineComponent({
   name: "Dashboard",
   components: {
     StatsCard,
@@ -80,10 +82,11 @@ export default {
     ArrowNarrowLeftIcon,
     ArrowNarrowRightIcon,
   },
-  setup() {
+  setup(props) {
     const page = ref(1);
     const pageCount = ref(1);
     const pokemons = ref([]);
+    const searchData = ref([]);
     const loading = ref(false);
     const detailOpened = ref(false);
     const selectedPokemon = reactive({});
@@ -124,6 +127,7 @@ export default {
     });
 
     onMounted(() => {
+      emitter.on("search", (value) => filterData(value));
       loading.value = true;
       fetchPokemons();
     });
@@ -135,8 +139,9 @@ export default {
         })
         .then((response) => {
           const { data } = response;
-          console.log('data', data);
+
           pokemons.value = [...data];
+          searchData.value = [...data];
           pageCount.value = data.length / 10;
           loading.value = false;
         })
@@ -162,14 +167,25 @@ export default {
             headers: { Authorization: `${localStorage.token}` },
           }
         )
-        .then((response) => {
-          const { data } = response;
-          console.log('')
+        .then(() => {
           fetchPokemons();
         })
         .catch((error) => {
           console.log("error", error);
         });
+    }
+
+    function filterData(value) {
+      const data = [...searchData.value];
+
+      const filteredData =
+        value === ""
+          ? data
+          : data.filter((item) => item.name.includes(value.toLowerCase()));
+      pokemons.value = [...filteredData];
+      pageCount.value = filteredData.length / 10;
+      page.value = 1;
+      return;
     }
 
     function getDetails(id) {
@@ -196,9 +212,10 @@ export default {
       selectedPokemon,
       getDetails,
       closeDetails,
+      props,
     };
   },
-};
+});
 </script>
 
 <style lang="scss">
@@ -210,16 +227,20 @@ export default {
 }
 
 .page-heading {
-  font-size: 30px;
+  font-size: 36px;
   color: $cl-main-heading;
   font-weight: 700;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
 }
 
 .page-content {
   .row {
     margin: 0;
   }
+}
+
+.row-stats {
+  margin: 1rem 0rem;
 }
 
 .row-pokemons {
@@ -278,7 +299,13 @@ export default {
 }
 
 .pokeball-icon {
-  height: 200px;
-  width: 200px;
+  width: 30%;
+  margin-top: 4rem;
+}
+
+.loading-content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 </style>

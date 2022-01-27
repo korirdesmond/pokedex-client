@@ -5,7 +5,6 @@ import Signup from "@/views/Signup.vue";
 import Login from "@/views/Login.vue";
 
 const isAuthenticated = () => {
-  console.log("locl", localStorage.token);
   if (localStorage.token) return true;
   return false;
 };
@@ -38,7 +37,6 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  console.log("to", to);
   if (!isAuthenticated() && (to.name === "Dashboard" || to.fullPath === "/"))
     return "/Login";
   if (isAuthenticated() && (to.name === "Login" || to.fullPath === "/login"))

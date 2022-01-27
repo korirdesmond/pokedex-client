@@ -7,17 +7,13 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-interface Props {
-  title: string;
-  value: number;
-}
 export default defineComponent({
   name: "StatsCard",
   props: {
     title: String,
     value: Number,
   },
-  setup(props): any {
+  setup(props) {
     return { props };
   },
 });

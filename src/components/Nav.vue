@@ -30,6 +30,7 @@
             class="form-control form-control-light"
             placeholder="Search all pokemons"
             aria-describedby="basic-addon1"
+            v-model="search"
           />
         </div>
       </form>
@@ -54,22 +55,25 @@
   </nav>
 </template>
 
-<script lang="ts">
+<script>
 import { SearchIcon, MenuIcon } from "@heroicons/vue/solid";
-import { ref } from "vue";
+import { ref, watch, defineComponent } from "vue";
 import { useRouter } from "vue-router";
+import emitter from "tiny-emitter/instance";
 
-export default {
+export default defineComponent({
   name: "Nav",
   components: {
     SearchIcon,
     MenuIcon,
   },
-  setup() {
+  props: {},
+  setup(props) {
     const isMenuOpened = ref(false);
     const isDropdownOpened = ref(false);
     const router = useRouter();
     const name = localStorage.getItem("name");
+    const search = ref("");
 
     function toggleMenu() {
       isMenuOpened.value = !isMenuOpened.value;
@@ -87,6 +91,10 @@ export default {
       router.push("/login");
     }
 
+    watch(search, (value) => {
+      emitter.emit("search", value);
+    });
+
     return {
       toggleMenu,
       isMenuOpened,
@@ -94,9 +102,11 @@ export default {
       isDropdownOpened,
       logout,
       name,
+      props,
+      search,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

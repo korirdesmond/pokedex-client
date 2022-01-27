@@ -26,7 +26,7 @@
         <StarIcon
           class="star-icon"
           :class="[props.favourite ? 'star-icon-fovorited' : '']"
-        />Star {{ props.favourite ? 'true' : 'fals' }}
+        />Star
       </button>
       <button
         class="btn btn-lg card-action-details"
@@ -96,7 +96,7 @@ export default defineComponent({
   height: 340px;
   width: 300px;
   padding: 0px;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .card-thumbnail {
@@ -129,7 +129,7 @@ export default defineComponent({
   span {
     margin: 5px;
     font-size: 12px;
-    font-weight: 400;
+    font-weight: 700;
     border-radius: 8px;
     padding: 1px 5px;
     text-transform: capitalize;

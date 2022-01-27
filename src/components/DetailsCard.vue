@@ -12,6 +12,7 @@
         <StarIcon
           class="star-icon"
           :class="[props.favourite ? 'star-icon-fovorited' : '']"
+          @click="emitFavoriteUpdate(props.id)"
         />
       </div>
       <div class="details-info-id">{{ idHash(props.id) }}</div>
@@ -33,8 +34,7 @@
     <div class="details-info-row">
       <div class="details-info-title">Description</div>
       <div class="details-info-description">
-        It can go for days\nwithout eating a\nsingle morsel.\fIn the bulb
-        on\nits back, it\nstores energy
+        {{ props.description }}
       </div>
     </div>
     <div class="details-info-row">
@@ -53,9 +53,13 @@
     <div class="details-info-row">
       <div class="details-info-title">Abilities</div>
       <div class="details-abilities">
-        <span v-for="ability in props.abilities" :key="ability.ability.name">{{
-          ability.ability.name
-        }}</span>
+        <span
+          v-for="ability in props.abilities"
+          :key="ability.ability.name"
+          :class="[ability.is_hidden ? 'hidden' : '']"
+        >
+          {{ ability.ability.name }}</span
+        >
       </div>
     </div>
   </div>
@@ -82,6 +86,7 @@ export default defineComponent({
     species: Object,
     stats: Object,
     favourite: Boolean,
+    description: String,
   },
   setup(props, { emit }) {
     function idHash(id: number) {
@@ -94,7 +99,11 @@ export default defineComponent({
       emit("close-details");
     }
 
-    return { props, idHash, typesColorPair, closeDetails };
+    function emitFavoriteUpdate(id: number) {
+      emit("update-favorite", id);
+    }
+
+    return { props, idHash, typesColorPair, closeDetails, emitFavoriteUpdate };
   },
 });
 </script>
@@ -152,6 +161,7 @@ export default defineComponent({
   width: 28px;
   height: 28px;
   margin-left: 15px;
+  cursor: pointer;
 }
 
 .star-icon-fovorited {
@@ -217,13 +227,18 @@ export default defineComponent({
 .details-abilities {
   span {
     margin: 5px;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 400;
     border-radius: 14px;
     padding: 1px 10px;
     text-transform: capitalize;
     color: $black;
     background-color: $neutral-gray-150;
+  }
+
+  .hidden:before {
+    content: "\2022";
+    margin-right: 5px;
   }
 }
 </style>
