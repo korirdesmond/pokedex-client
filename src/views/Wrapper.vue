@@ -36,11 +36,11 @@ export default {
   z-index: 100; /* Behind the navbar */
   padding: 48px 0 0; /* Height of navbar */
   min-height: 100vh;
-  height: 100vh;
 }
 
 .sidebar-sticky {
   height: 100%;
+  min-height: 100vh;
   background-color: $cl-brand-red;
 }
 

@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-light fixed-top">
     <a class="navbar-brand col-sm-3 col-md-1 mr-0" href="#"
-      ><img class="navbar-brand_logo" src="../assets/Logo.svg"
+      ><img class="navbar-brand_logo" src="../assets/Pokeball.svg"
     /></a>
 
     <div class="navbar-right shadow-base collapse navbar-collapse">

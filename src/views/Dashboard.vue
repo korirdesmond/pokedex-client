@@ -1,44 +1,68 @@
 <template>
   <div class="container-fluid">
-    <div class="page-heading">Pokemons</div>
-    <div class="page-content">
-      <div class="row row-stats">
-        <StatsCard title="Pokemons" :value="pokemonStats" />
-        <StatsCard title="Species" :value="pokemonStats" />
-        <StatsCard title="Types" :value="pokemonStats" />
-      </div>
+    <div class="dashboard-container">
+      <div
+        class="dashboard-container-main"
+        :style="{
+          width: detailOpened ? '65%' : '100%',
+          paddingRight: detailOpened ? '5px' : '1px',
+        }"
+      >
+        <div class="page-heading">Pokemons</div>
 
-      <div class="row-pokemons">
-        <PokemonCard />
-        <PokemonCard />
-        <PokemonCard />
-        <PokemonCard />
-        <PokemonCard />
-        <PokemonCard />
-        <PokemonCard />
-        <PokemonCard />
-        <PokemonCard />
-        <PokemonCard />
-      </div>
+        <div class="page-content" v-if="loading">
+          <img class="pokeball-icon" src="../assets/Pokeball.svg" />
+        </div>
+        <div class="page-content" v-else>
+          <div class="row row-stats">
+            <StatsCard title="Pokemons" :value="pokemonStats" />
+            <StatsCard title="Species" :value="pokemonStats" />
+            <StatsCard title="Types" :value="pokemonStats" />
+          </div>
 
-      <div class="card pagination-container">
-        <n-pagination v-model:page="page" :page-count="100" :page-slot="7">
-          <template #prev
-            ><ArrowNarrowLeftIcon class="arrow-left-icon" />Previous</template
-          >
-          <template #next
-            >Next <ArrowNarrowRightIcon class="arrow-right-icon"
-          /></template>
-        </n-pagination>
+          <div class="row-pokemons">
+            <PokemonCard
+              v-for="pokemon in pagePokemons"
+              :key="pokemon.id"
+              v-bind="pokemon"
+              @update-favorite="updateFavorite"
+              @get-details="getDetails"
+            />
+          </div>
+
+          <div class="card pagination-container">
+            <n-pagination
+              v-model:page="page"
+              :page-count="pageCount"
+              :page-slot="7"
+            >
+              <template #prev
+                ><ArrowNarrowLeftIcon
+                  class="arrow-left-icon"
+                />Previous</template
+              >
+              <template #next
+                >Next <ArrowNarrowRightIcon class="arrow-right-icon"
+              /></template>
+            </n-pagination>
+          </div>
+        </div>
       </div>
+      <DetailsCard
+        v-if="detailOpened"
+        v-bind="selectedPokemon"
+        @close-details="closeDetails"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { onMounted, ref, computed, reactive } from "vue";
+import axios from "axios";
 import StatsCard from "@/components/StatsCard.vue";
 import PokemonCard from "@/components/PokemonCard.vue";
+import DetailsCard from "@/components/DetailsCard.vue";
 import { NPagination } from "naive-ui";
 import {
   ArrowNarrowLeftIcon,
@@ -51,20 +75,99 @@ export default {
     StatsCard,
     PokemonCard,
     NPagination,
+    DetailsCard,
     ArrowNarrowLeftIcon,
     ArrowNarrowRightIcon,
   },
   setup() {
     const pokemonStats = ref(100);
     const page = ref(1);
+    const pageCount = ref(1);
+    const pokemons = ref([]);
+    const loading = ref(false);
+    const detailOpened = ref(false);
+    const selectedPokemon = reactive({});
 
-    return { pokemonStats, page };
+    const pagePokemons = computed(() => {
+      const startIdx = page.value * 10 - 10;
+      const endIdx = page.value * 10;
+      return pokemons.value.slice(startIdx, endIdx);
+    });
+
+    onMounted(() => {
+      loading.value = true;
+      fetchPokemons();
+    });
+
+    function fetchPokemons() {
+      return axios
+        .get("pokemons", {
+          headers: { Authorization: `${localStorage.token}` },
+        })
+        .then((response) => {
+          const { data } = response;
+          pokemons.value = [...data];
+          pageCount.value = data.length / 10;
+          loading.value = false;
+        })
+        .catch((error) => {
+          loading.value = false;
+          console.log("error", error);
+        });
+    }
+
+    function updateFavorite(pokemonId) {
+      return axios
+        .patch(
+          `pokemons/${pokemonId}`,
+          {},
+          {
+            headers: { Authorization: `${localStorage.token}` },
+          }
+        )
+        .then((response) => {
+          const { data } = response;
+          fetchPokemons();
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    }
+
+    function getDetails(id) {
+      const pokemon = pagePokemons.value.find((item) => item.id === id);
+      Object.assign(selectedPokemon, pokemon);
+      detailOpened.value = true;
+      return;
+    }
+
+    function closeDetails() {
+      detailOpened.value = false;
+    }
+
+    return {
+      pokemonStats,
+      page,
+      pageCount,
+      pagePokemons,
+      loading,
+      updateFavorite,
+      detailOpened,
+      selectedPokemon,
+      getDetails,
+      closeDetails,
+    };
   },
 };
 </script>
 
 <style lang="scss">
 @import "@/scss/variables.scss";
+
+.dashboard-container {
+  width: 100%;
+  position: relative;
+}
 
 .page-heading {
   font-size: 30px;
@@ -86,7 +189,7 @@ export default {
 }
 
 .pagination-container {
-  width: 100%;
+  width: 95%;
   height: 4rem;
   margin-bottom: 2rem;
   padding: 0px 10px;
@@ -132,5 +235,10 @@ export default {
   width: 24px;
   height: 24px;
   margin-left: 10px;
+}
+
+.pokeball-icon {
+  height: 200px;
+  width: 200px;
 }
 </style>

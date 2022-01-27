@@ -1,23 +1,37 @@
 <template>
   <div class="card">
     <div class="card-thumbnail shadow-thumb">
-      <img
-        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
-      />
+      <img :src="props.sprite" />
     </div>
     <div class="card-info">
-      <div class="card-name">Bullbasar</div>
-      <div class="card-id">#001</div>
+      <div class="card-name">{{ props.name }}</div>
+      <div class="card-id">{{ idHash(props.id) }}</div>
       <div class="card-types">
-        <span>Grass</span>
-        <span>Poison</span>
+        <span
+          v-for="(type, index) in props.types"
+          :key="index"
+          :style="{
+            color: typesColorPair[type.type.name][0],
+            backgroundColor: typesColorPair[type.type.name][1],
+          }"
+          >{{ type.type.name }}</span
+        >
       </div>
     </div>
     <div class="card-action">
-      <button class="btn btn-lg card-action-star">
-        <StarIcon class="star-icon" />Star
+      <button
+        class="btn btn-lg card-action-star"
+        @click="emitFavoriteUpdate(props.id)"
+      >
+        <StarIcon
+          class="star-icon"
+          :class="[props.favorite ? 'star-icon-fovorited' : '']"
+        />Star
       </button>
-      <button class="btn btn-lg card-action-details">
+      <button
+        class="btn btn-lg card-action-details"
+        @click="emitGetDetails(props.id)"
+      >
         <IdentificationIcon class="identification-icon" />Details
       </button>
     </div>
@@ -27,12 +41,46 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { IdentificationIcon, StarIcon } from "@heroicons/vue/solid";
+import { typesColorPair } from "@/utils";
 
 export default defineComponent({
   name: "PokemonCard",
   components: {
     StarIcon,
     IdentificationIcon,
+  },
+  props: {
+    name: String,
+    id: Number,
+    types: Object,
+    abilities: Object,
+    sprite: String,
+    species: Object,
+    stats: Object,
+    favorite: Boolean,
+  },
+  setup(props, { emit }) {
+    function idHash(id: number) {
+      if (id < 10) return `#00${id}`;
+      if (id < 100) return `#0${id}`;
+      else return `#${id}`;
+    }
+
+    function emitFavoriteUpdate(id: number) {
+      emit("update-favorite", id);
+    }
+
+    function emitGetDetails(id: number) {
+      emit("get-details", id);
+    }
+
+    return {
+      props,
+      typesColorPair,
+      idHash,
+      emitFavoriteUpdate,
+      emitGetDetails,
+    };
   },
 });
 </script>
@@ -105,8 +153,11 @@ export default defineComponent({
 .star-icon {
   width: 24px;
   height: 24px;
-  color: $cl-brand-gold;
   margin-right: 10px;
+}
+
+.star-icon-fovorited {
+  color: $cl-brand-gold;
 }
 
 .identification-icon {
