@@ -16,8 +16,8 @@
         <div class="page-content" v-else>
           <div class="row row-stats">
             <StatsCard title="Pokemons" :value="pokemonStats" />
-            <StatsCard title="Species" :value="pokemonStats" />
-            <StatsCard title="Types" :value="pokemonStats" />
+            <StatsCard title="Species" :value="speciesStats" />
+            <StatsCard title="Types" :value="typesStats" />
           </div>
 
           <div class="row-pokemons">
@@ -80,7 +80,6 @@ export default {
     ArrowNarrowRightIcon,
   },
   setup() {
-    const pokemonStats = ref(100);
     const page = ref(1);
     const pageCount = ref(1);
     const pokemons = ref([]);
@@ -92,6 +91,34 @@ export default {
       const startIdx = page.value * 10 - 10;
       const endIdx = page.value * 10;
       return pokemons.value.slice(startIdx, endIdx);
+    });
+
+    const pokemonStats = computed(() => pokemons.value.length);
+    const speciesStats = computed(() => {
+      const seen = {};
+      const count = pokemons.value.reduce((acc, item) => {
+        if (!seen[item.species.name]) {
+          acc += 1;
+          seen[item.species.name] = true;
+        }
+        return acc;
+      }, 0);
+      return count;
+    });
+    const typesStats = computed(() => {
+      const seen = {};
+      const count = pokemons.value.reduce((acc, item) => {
+        let i = 0;
+        while (i < item.types.length) {
+          if (!seen[item.types[i].type.name]) {
+            acc += 1;
+            seen[item.types[i].type.name] = true;
+          }
+          i++;
+        }
+        return acc;
+      }, 0);
+      return count;
     });
 
     onMounted(() => {
@@ -147,6 +174,8 @@ export default {
 
     return {
       pokemonStats,
+      speciesStats,
+      typesStats,
       page,
       pageCount,
       pagePokemons,
