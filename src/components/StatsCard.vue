@@ -25,6 +25,7 @@ export default defineComponent({
 .card {
   background-color: $white;
   margin-right: 1rem;
+  margin-bottom: 5px;
   padding: 10px 20px;
 }
 

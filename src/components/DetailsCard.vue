@@ -114,12 +114,21 @@ export default defineComponent({
 .dashboard-container-details {
   min-height: 100vh;
   height: 100%;
-  width: 35%;
-  top: 0;
-  right: -2%;
   position: absolute;
   padding: 15px 2rem 5px 2rem !important;
-  margin-right: 2px !important;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin-right: 0px;
+
+  @media (min-width: 768px) {
+    width: 35%;
+    top: 0;
+    right: -2%;
+    left: unset;
+    margin-right: 2px !important;
+  }
 }
 
 .details-header {

@@ -3,10 +3,7 @@
     <div class="dashboard-container">
       <div
         class="dashboard-container-main"
-        :style="{
-          width: detailOpened ? '65%' : '100%',
-          paddingRight: detailOpened ? '5px' : '1px',
-        }"
+        :class="[detailOpened ? 'container-main' : '']"
       >
         <div class="page-heading">Pokémons</div>
 
@@ -224,6 +221,21 @@ export default defineComponent({
 .dashboard-container {
   width: 100%;
   position: relative;
+}
+
+.dashboard-container-main {
+  width: 100%;
+  padding-right: 1px;
+}
+
+.container-main {
+  padding-right: 5px !important;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    width: 65% !important;
+    padding-right: 1px;
+  }
 }
 
 .page-heading {
