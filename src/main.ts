@@ -4,6 +4,6 @@ import router from "./router";
 import store from "./store";
 import axios from "axios";
 
-axios.defaults.baseURL = "https://pokedexxapi.herokuapp.com/";
+axios.defaults.baseURL = process.env.VUE_APP_API;
 
 createApp(App).use(store).use(router).mount("#app");

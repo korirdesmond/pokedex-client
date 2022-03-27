@@ -27,21 +27,20 @@
         />
       </div>
 
-      <button class="w-100 btn btn-lg btn-primary" type="submit">
+      <button
+        class="w-100 btn btn-lg btn-primary"
+        type="submit"
+        :disabled="submiting"
+      >
         {{ submiting ? "Submiting ..." : "Log In" }}
       </button>
 
-      <p class="m-3 muted-text bottom-text">
+      <p class="m-3 muted-text bottom-text text-center">
         Pokemon and Pokemon names are trademarks of Nintendo
       </p>
     </form>
   </main>
 </template>
-
-<style lang="scss">
-@import "@/scss/form.scss";
-@import "@/scss/global.scss";
-</style>
 
 <script lang="ts">
 import { ref } from "vue";
@@ -94,3 +93,8 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+@import "@/scss/form.scss";
+@import "@/scss/global.scss";
+</style>

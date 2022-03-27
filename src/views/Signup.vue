@@ -59,7 +59,11 @@
         </ul>
       </div>
 
-      <button class="w-100 btn btn-lg btn-primary" type="submit">
+      <button
+        class="w-100 btn btn-lg btn-primary"
+        type="submit"
+        :disabled="submiting"
+      >
         {{ submiting ? "Submiting..." : "Sign Up" }}
       </button>
       <p class="m-3 muted-text bottom-text">
@@ -68,11 +72,6 @@
     </form>
   </main>
 </template>
-
-<style lang="scss">
-@import "@/scss/form.scss";
-@import "@/scss/global.scss";
-</style>
 
 <script lang="ts">
 import { ref, computed } from "vue";
@@ -173,3 +172,8 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+@import "@/scss/form.scss";
+@import "@/scss/global.scss";
+</style>
