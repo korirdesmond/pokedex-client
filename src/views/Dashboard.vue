@@ -27,11 +27,11 @@
             />
           </div>
 
-          <div class="card pagination-container">
+          <div class="card pagination-container" v-if="pagePokemons.length > 0">
             <n-pagination
               v-model:page="page"
               :page-count="pageCount"
-              :page-slot="7"
+              :page-size="10"
             >
               <template #prev
                 ><ArrowNarrowLeftIcon
@@ -139,7 +139,7 @@ export default defineComponent({
 
           pokemons.value = [...data];
           searchData.value = [...data];
-          pageCount.value = data.length / 10;
+          pageCount.value = Math.ceil(data.length / 10);
           loading.value = false;
         })
         .catch((error) => {
@@ -180,7 +180,7 @@ export default defineComponent({
           ? data
           : data.filter((item) => item.name.includes(value.toLowerCase()));
       pokemons.value = [...filteredData];
-      pageCount.value = filteredData.length / 10;
+      pageCount.value = Math.ceil(filteredData.length / 10);
       page.value = 1;
       return;
     }

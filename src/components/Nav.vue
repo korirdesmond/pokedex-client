@@ -47,7 +47,7 @@
             :class="[isDropdownOpened ? 'show' : '']"
             aria-labelledby="dropdown01"
           >
-            <a class="dropdown-item" @click="logout">Logout</a>
+            <button class="dropdown-item" @click="logout">Logout</button>
           </div>
         </li>
       </ul>
@@ -68,7 +68,7 @@ export default defineComponent({
     MenuIcon,
   },
   props: {},
-  setup(props) {
+  setup() {
     const isMenuOpened = ref(false);
     const isDropdownOpened = ref(false);
     const router = useRouter();
@@ -102,7 +102,6 @@ export default defineComponent({
       isDropdownOpened,
       logout,
       name,
-      props,
       search,
     };
   },
